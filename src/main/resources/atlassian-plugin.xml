@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}"
+	plugins-version="2">
+	<plugin-info>
+		<description>${project.description}</description>
+		<version>${project.version}</version>
+		<vendor name="${project.organization.name}" url="${project.organization.url}" />
+		<param name="plugin-icon">images/pluginIcon.png</param>
+		<param name="plugin-logo">images/pluginLogo.png</param>
+	</plugin-info>
+	
+	<!-- add our i18n resource -->
+	<resource type="i18n" name="i18n" location="confluence-attachment-blocker" />
+	
+	<!-- add our web resources -->
+	<web-resource key="confluence-attachment-blocker-resources" name="Confluence Attachment BLocker Web Resources">
+		<resource type="download" name="images/" location="/images" />
+		<context>confluence-attachment-blocker</context>
+	</web-resource>
+
+	<xwork key="confluence-attachment-blocker-actions" name="Confluence Attachment Blocker Actions">
+		
+		<package name="pages" extends="pages" namespace="/pages">
+		
+			<default-interceptor-ref name="validatingStack" />
+			<action name="attachfile" class="example.app.actions.AttachFileBlockingAction">
+				<result name="input" type="json" />
+				<result name="json" type="json" />
+				<result name="html" type="velocity">/ajax/htmlwrapper.vm</result>
+				<result name="error" type="json" />
+				<result name="notpermitted" type="json" />
+			</action>
+			<action name="doattachfile" class="example.app.actions.ViewPageAttachmentsBlockingAction">
+				<result name="error" type="velocity">/pages/viewattachments.vm</result>
+				<result name="input" type="velocity">/pages/viewattachments.vm</result>
+				<result name="success" type="redirect">/pages/viewpageattachments.action?pageId=${pageId}&amp;sortBy=date</result>
+			</action>
+			<action name="domacroattachfile" class="example.app.actions.ViewPageAttachmentsBlockingAction">
+				<result name="error" type="dispatcher">/pages/viewpage.action</result>
+				<result name="input" type="dispatcher">/pages/viewpage.action</result>
+				<result name="success" type="redirect">/pages/viewpage.action?pageId=${pageId}</result>
+			</action>
+			
+		</package>
+		
+		<package name="attachments-macro-action" extends="default" namespace="/pages/plugins/attachments">
+			<default-interceptor-ref name="validatingStack" />
+			<action name="doattachfile" class="example.app.actions.ViewPageAttachmentsBlockingAction">
+				<result name="error" type="velocity">/pages/viewattachments.vm</result>
+				<result name="input" type="velocity">/pages/viewattachments.vm</result>
+				<result name="success" type="redirect">/pages/viewpage.action?pageId=${pageId}</result>
+			</action>
+		</package>
+		
+		<package name="drag-and-drop" extends="drag-and-drop" namespace="/plugins/drag-and-drop">
+			<default-interceptor-ref name="validatingStack" />
+			<action name="upload" class="example.app.actions.UploadBlockingAction">
+				<param name="RequireSecurityToken">true</param>
+				<result name="input" type="json" />
+				<result name="success" type="json" />
+				<result name="error" type="json" />
+			</action>
+		</package>
+		
+		
+	</xwork>
+
+
+</atlassian-plugin>
