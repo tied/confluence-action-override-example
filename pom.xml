@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>example.app</groupId>
     <artifactId>confluence-attachment-blocker</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>Confluence Attachment Blocker</name>
     <description>Example project to show blocking of Confluence attachments via action overrides</description>
     <packaging>atlassian-plugin</packaging>
@@ -190,7 +190,7 @@
         </pluginManagement>
     </build>
     <properties>
-        <confluence.version>5.10.7</confluence.version>
+        <confluence.version>6.1.2</confluence.version>
         <confluence.data.version>5.10.5</confluence.data.version>
         <amps.version>6.2.11</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
